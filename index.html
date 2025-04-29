@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Void Ascendant: Stage 1 – Survival</title>
+  <link rel="stylesheet" href="style.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body>
+<div id="game" x-data="game()" x-init="init()">
+  <h1>Void Ascendant: Stage 1 – Survival</h1>
+
+  <!-- Resources -->
+  <section>
+    <h2>Resources</h2>
+    <ul>
+      <li>Energy: <span x-text="Math.floor(energy)"></span>/<span x-text="energyCap"></span></li>
+      <li>Minerals: <span x-text="Math.floor(minerals)"></span></li>
+      <li>Organics (Food): <span x-text="Math.floor(organics)"></span></li>
+    </ul>
+  </section>
+
+  <!-- Actions -->
+  <section>
+    <h2>Actions</h2>
+    <button @click="gather('minerals')" :disabled="gameOver">Gather Minerals (+<span x-text="gatherMinerals"></span>)</button>
+    <button @click="gather('organics')" :disabled="gameOver">Gather Organics (+<span x-text="gatherOrganics"></span>)</button>
+    <button @click="gather('energy')" :disabled="energy >= energyCap || gameOver">Generate Energy (manual +1)</button>
+  </section>
+
+  <!-- Crafting -->
+  <section>
+    <h2>Craft / Build</h2>
+    <template x-for="craft in crafts" :key="craft.id">
+      <div class="craft" x-show="!items[craft.id] && hasPrereq(craft)">
+        <button :disabled="!canAfford(craft.cost) || gameOver" @click="craftItem(craft)" x-text="craft.name"></button>
+        <span x-text="' Cost: ' + Object.entries(craft.cost).map(([k,v]) => `${v} ${k}`).join(', ')"></span>
+      </div>
+    </template>
+  </section>
+
+  <!-- Log -->
+  <section>
+    <h2>Log</h2>
+    <div id="messages" x-ref="messages">
+      <template x-for="(msg, index) in logMessages" :key="index">
+        <div :class="msg.cls" x-text="msg.text"></div>
+      </template>
+    </div>
+  </section>
+</div>
+
+<script>
+function game() {
+  return {
+    // ----- State -----
+    energy: 0,
+    energyCap: 50,
+    minerals: 0,
+    organics: 0,
+    gatherMinerals: 1,
+    gatherOrganics: 1,
+    items: {},
+    built: { solarCollector: 0 },
+    totalGathered: 0,
+    gameOver: false,
+    stageComplete: false,
+    logMessages: [],
+    memoryShown: false,
+    ariaWarn: false,
+    finishShown: false,
+
+    // ----- Craft Definitions -----
+    crafts: [
+      {id:'scavengingTools', name:'Scavenging Tools', cost:{minerals:10}, prereq:[], effect(){ this.gatherMinerals = 2; this.gatherOrganics = 2; this.log('The improvised tools speed up gathering.');}},
+      {id:'emergencyBeacon', name:'Emergency Beacon', cost:{energy:15, minerals:5}, prereq:['scavengingTools'], effect(){ this.log('A faint signal pulses into the sky... will anyone hear it?');}},
+      {id:'primitiveWeapons', name:'Primitive Weapons', cost:{minerals:20, organics:5}, prereq:['scavengingTools'], effect(){ this.log('Crude weapons fashioned. Wildlife encounters will be safer.');}},
+      {id:'solarCollector', name:'Solar Collector', cost:{minerals:25}, prereq:[], effect(){ this.built.solarCollector++; this.log('Solar panels deployed. Passive energy begins to flow.');}},
+      {id:'batteryBank', name:'Battery Bank', cost:{minerals:30, energy:20}, prereq:['solarCollector'], effect(){ this.energyCap += 100; this.log('Additional batteries increase energy storage.');}},
+      {id:'recyclingStation', name:'Recycling Station', cost:{energy:20, minerals:10}, prereq:['solarCollector'], effect(){ this.log('Debris processing enabled. Minerals production boosted.');}},
+      {id:'basicAlloys', name:'Basic Alloys (Complete Stage 1)', cost:{energy:50, minerals:50, organics:25}, prereq:['recyclingStation','batteryBank'], effect(){ this.stageComplete = true; this.log('Alloys forged! Stage 1 complete – a settlement beckons...');}}
+    ],
+
+    // ----- Helper Methods -----
+    log(text, cls='msg') {
+      // Create a new array to ensure Alpine detects the change
+      this.logMessages = [...this.logMessages, {text, cls}];
+      this.$nextTick(() => {
+        if (this.$refs.messages) {
+          this.$refs.messages.scrollTop = this.$refs.messages.scrollHeight;
+        }
+      });
+    },
+    canAfford(cost) {
+      return Object.entries(cost).every(([k,v]) => this[k] >= v);
+    },
+    pay(cost) {
+      Object.entries(cost).forEach(([k,v]) => { this[k] -= v; });
+    },
+    hasPrereq(craft) {
+      return craft.prereq.every(id => this.items[id]);
+    },
+    craftItem(craft) {
+      if (this.gameOver) return;
+      if (!this.canAfford(craft.cost)) { this.log('Not enough resources'); return; }
+      this.pay(craft.cost);
+      this.items[craft.id] = true;
+      craft.effect.call(this);
+      this.checkEvents();
+    },
+    wildlifeEncounter() {
+      if (Math.random() < 0.05) {
+        if (this.items.primitiveWeapons) {
+          this.log('A predator lunges, but you drive it off with your weapons.');
+        } else {
+          this.gameOverFunc('You were killed by hostile wildlife.');
+          return true;
+        }
+      }
+      return false;
+    },
+    gather(type) {
+      if (this.gameOver) return;
+
+      if (type === 'energy') {
+        if (this.energy >= this.energyCap) { this.log('Energy stores full.'); return; }
+        this.energy += 1;
+      } else {
+        if (this.wildlifeEncounter()) return;
+        if (type === 'minerals') this.minerals += this.gatherMinerals;
+        if (type === 'organics') this.organics += this.gatherOrganics;
+      }
+      this.totalGathered += 1;
+      this.checkEvents();
+    },
+    gameOverFunc(reason) {
+      if (this.gameOver) return;
+      this.gameOver = true;
+      this.log('GAME OVER – ' + reason, 'gameover');
+      console.log('Game over triggered:', reason); // Debug log
+    },
+    checkEvents() {
+      if (this.totalGathered >= 50 && !this.memoryShown) {
+        this.log('Memory Fragment: A flash – the Athena breaking apart above the planet...');
+        this.memoryShown = true;
+      }
+      if (this.items.solarCollector && !this.ariaWarn) {
+        this.log('ARIA: "Unexplained energy signature detected nearby..."');
+        this.ariaWarn = true;
+      }
+      if (this.stageComplete && !this.finishShown) {
+        this.log('You survived the wilds and laid the foundations for a future colony. Thanks for playing this prototype!');
+        this.finishShown = true;
+      }
+    },
+
+    // ----- Init -----
+    init() {
+      // Add initial log message
+      this.log('You wake in the shattered remains of an escape pod. Gather resources to survive.');
+
+      // Passive solar generation
+      setInterval(() => {
+        if (this.gameOver) return;
+        if (this.built.solarCollector > 0) {
+          const produced = 2 * this.built.solarCollector;
+          this.energy = Math.min(this.energyCap, this.energy + produced);
+        }
+      }, 1000);
+
+      // Energy drain
+      setInterval(() => {
+        if (this.gameOver) return;
+        this.energy -= 1;
+        if (this.energy < 0) this.gameOverFunc('Life‑support failed after energy depletion.');
+      }, 5000);
+
+      // Hunger
+      setInterval(() => {
+        if (this.gameOver) return;
+        if (this.organics > 0) {
+          this.organics -= 1;
+        } else {
+          this.gameOverFunc('You starved to death.');
+        }
+      }, 10000);
+    }
+  }
+}
+</script>
+</body>
+</html>

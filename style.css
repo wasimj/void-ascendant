@@ -1,0 +1,106 @@
+/* Void Ascendant: Style Sheet */
+/* Adapted from gemini.2.5.pro.html */
+
+body {
+    font-family: 'Courier New', Courier, monospace;
+    background-color: #111;
+    color: #eee;
+    padding: 20px;
+    max-width: 800px;
+    margin: auto;
+}
+
+#game {
+    border: 1px solid #444;
+    padding: 15px;
+    background-color: #222;
+}
+
+section, #resources, #actions, #craft, #log {
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px dashed #555;
+}
+
+h1, h2 {
+    color: #0f0;
+    border-bottom: 1px solid #0f0;
+    padding-bottom: 5px;
+}
+
+button {
+    background-color: #333;
+    color: #eee;
+    border: 1px solid #666;
+    padding: 8px 12px;
+    margin: 5px;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+button:hover {
+    background-color: #555;
+}
+
+button:disabled {
+    background-color: #222;
+    color: #666;
+    cursor: not-allowed;
+}
+
+/* Resource List */
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    margin: 5px 0;
+    color: #ddd;
+}
+
+/* Log Messages */
+#messages {
+    max-height: 220px;
+    overflow-y: auto;
+    background-color: #1a1a1a;
+    padding: 0.5rem;
+}
+
+.msg {
+    color: #aaa;
+    font-size: 0.9em;
+    margin-bottom: 5px;
+    border-bottom: 1px dotted #333;
+    padding-bottom: 3px;
+}
+
+.narrative {
+    color: #0ff; /* Cyan for narrative */
+    font-style: italic;
+}
+
+.gameover {
+    color: #f66; /* Red for game over */
+    font-weight: bold;
+}
+
+/* Crafting */
+.craft {
+    margin-bottom: 0.5rem;
+    padding: 0.5rem;
+    background: #1a1a1a;
+    border-left: 4px solid #0f0; /* Green accent */
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+    body {
+        padding: 10px;
+    }
+    
+    button {
+        width: 100%;
+        margin: 5px 0;
+    }
+}
