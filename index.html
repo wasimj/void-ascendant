@@ -149,8 +149,9 @@ function game() {
         this.ariaWarn = true;
       }
       if (this.stageComplete && !this.finishShown) {
-        this.log('You survived the wilds and laid the foundations for a future colony. Thanks for playing this prototype!');
+        this.log('Congratulations. You survived the wilds and laid the foundations for a future colony!', 'msg');
         this.finishShown = true;
+        this.gameOver = true; // Prevent further countdowns and game over triggers
       }
     },
 
