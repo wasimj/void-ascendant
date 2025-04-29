@@ -85,6 +85,11 @@ li {
     font-weight: bold;
 }
 
+.danger {
+    color: #f44 !important;
+    font-weight: bold;
+}
+
 /* Crafting */
 .craft {
     margin-bottom: 0.5rem;

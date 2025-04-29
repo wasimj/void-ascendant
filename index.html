@@ -12,14 +12,30 @@
 <div id="game" x-data="game()">
   <h1>Void Ascendant</h1>
 
+  <!-- Log -->
+  <section>
+    <h2>Log</h2>
+    <div id="messages" x-ref="messages">
+      <template x-for="(msg, index) in logMessages" :key="index">
+        <div :class="msg.cls" x-text="msg.text"></div>
+      </template>
+    </div>
+  </section>
+
   <!-- Resources -->
   <section style="display: flex; justify-content: space-between; align-items: flex-start;">
     <div>
       <h2>Resources</h2>
       <ul>
-        <li>Energy: <span x-text="Math.floor(energy)"></span>/<span x-text="energyCap"></span></li>
+        <li>
+          Energy: 
+          <span :class="{'danger': energy <= 5}" x-text="Math.floor(energy)"></span>/<span x-text="energyCap"></span>
+        </li>
         <li>Minerals: <span x-text="Math.floor(minerals)"></span></li>
-        <li>Organics (Food): <span x-text="Math.floor(organics)"></span></li>
+        <li>
+          Organics (Food): 
+          <span :class="{'danger': organics <= 1}" x-text="Math.floor(organics)"></span>
+        </li>
       </ul>
     </div>
     <div style="text-align: right; min-width: 80px;">
@@ -33,7 +49,7 @@
     <h2>Actions</h2>
     <button @click="gather('minerals')" :disabled="gameOver">Gather Minerals (+<span x-text="gatherMinerals"></span>)</button>
     <button @click="gather('organics')" :disabled="gameOver">Gather Organics (+<span x-text="gatherOrganics"></span>)</button>
-    <button @click="gather('energy')" :disabled="energy >= energyCap || gameOver">Generate Energy (manual +1)</button>
+    <button @click="gather('energy')" :disabled="energy >= energyCap || gameOver">Generate Energy</button>
   </section>
 
   <!-- Crafting -->
@@ -47,25 +63,14 @@
     </template>
   </section>
 
-  <!-- Log -->
-  <section>
-    <h2>Log</h2>
-    <div id="messages" x-ref="messages">
-      <template x-for="(msg, index) in logMessages" :key="index">
-        <div :class="msg.cls" x-text="msg.text"></div>
-      </template>
-    </div>
-  </section>
-</div>
-
-<script>
+  <script>
 function game() {
   return {
     // ----- State -----
-    energy: 0,
+    energy: 10,
     energyCap: 50,
     minerals: 0,
-    organics: 0,
+    organics: 3,
     gatherMinerals: 1,
     gatherOrganics: 1,
     items: {},
@@ -204,5 +209,6 @@ function game() {
   }
 }
 </script>
+</div>
 </body>
 </html>
