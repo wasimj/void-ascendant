@@ -96,9 +96,18 @@ li {
 /* Responsive design */
 @media (max-width: 600px) {
     body {
+        font-size: 1.4em; /* Larger base font size for mobile */
         padding: 10px;
     }
     
+    h1, h2 {
+        font-size: 1.5em;
+    }
+
+    button, li, .msg, .narrative, .gameover {
+        font-size: 1.2em;
+    }
+
     button {
         width: 100%;
         margin: 5px 0;
