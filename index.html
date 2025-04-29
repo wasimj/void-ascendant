@@ -11,13 +11,19 @@
   <h1>Void Ascendant: Stage 1 – Survival</h1>
 
   <!-- Resources -->
-  <section>
-    <h2>Resources</h2>
-    <ul>
-      <li>Energy: <span x-text="Math.floor(energy)"></span>/<span x-text="energyCap"></span></li>
-      <li>Minerals: <span x-text="Math.floor(minerals)"></span></li>
-      <li>Organics (Food): <span x-text="Math.floor(organics)"></span></li>
-    </ul>
+  <section style="display: flex; justify-content: space-between; align-items: center;">
+    <div>
+      <h2>Resources</h2>
+      <ul>
+        <li>Energy: <span x-text="Math.floor(energy)"></span>/<span x-text="energyCap"></span></li>
+        <li>Minerals: <span x-text="Math.floor(minerals)"></span></li>
+        <li>Organics (Food): <span x-text="Math.floor(organics)"></span></li>
+      </ul>
+    </div>
+    <div style="text-align: right; min-width: 120px;">
+      <h2 style="margin-bottom: 0.5em;">Days</h2>
+      <div style="font-size: 2em; font-weight: bold;" x-text="days"></div>
+    </div>
   </section>
 
   <!-- Actions -->
@@ -69,6 +75,7 @@ function game() {
     memoryShown: false,
     ariaWarn: false,
     finishShown: false,
+    days: 1, // Start at Day 1
 
     // ----- Craft Definitions -----
     crafts: [
@@ -109,7 +116,7 @@ function game() {
       this.checkEvents();
     },
     wildlifeEncounter() {
-      if (Math.random() < 0.05) {
+      if (Math.random() < 0.025) {
         if (this.items.primitiveWeapons) {
           this.log('A predator lunges, but you drive it off with your weapons.');
         } else {
@@ -131,6 +138,7 @@ function game() {
         if (type === 'organics') this.organics += this.gatherOrganics;
       }
       this.totalGathered += 1;
+      this.days += 1; // Increment day counter on each gather
       this.checkEvents();
     },
     gameOverFunc(reason) {
@@ -181,6 +189,7 @@ function game() {
         if (this.gameOver) return;
         if (this.organics > 0) {
           this.organics -= 1;
+          this.days += 1; // Increment day counter when food is consumed
         } else {
           this.gameOverFunc('You starved to death.');
         }
