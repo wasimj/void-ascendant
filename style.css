@@ -117,6 +117,39 @@ li {
     border-color: #0f0;
 }
 
+/* Win Overlay and Panel */
+.win-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(10, 20, 30, 0.92);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.win-panel {
+    background: #222;
+    border: 3px solid #0f0;
+    border-radius: 16px;
+    box-shadow: 0 4px 32px #000b;
+    padding: 2.5em 2em 2em 2em;
+    text-align: center;
+    color: #fff;
+    min-width: 320px;
+    max-width: 90vw;
+}
+.win-panel h2 {
+    color: #0f0;
+    font-size: 2.2em;
+    margin-bottom: 0.5em;
+}
+.win-score {
+    font-size: 1.4em;
+    margin: 1.2em 0 2em 0;
+    color: #0ff;
+    font-weight: bold;
+}
+
 /* Responsive design */
 @media (max-width: 600px) {
     body {
@@ -135,5 +168,16 @@ li {
     button {
         width: 100%;
         margin: 5px 0;
+    }
+    
+    .win-panel {
+        padding: 1.2em 0.5em 1.5em 0.5em;
+        min-width: unset;
+    }
+    .win-panel h2 {
+        font-size: 1.4em;
+    }
+    .win-score {
+        font-size: 1.1em;
     }
 }

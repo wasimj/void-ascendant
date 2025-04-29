@@ -12,6 +12,14 @@
 <div id="game" x-data="game()">
   <h1>Void Ascendant</h1>
 
+  <!-- Debug Win Button (hidden) -->
+  <button
+    style="display: none; position: absolute; top: 16px; right: 16px; z-index: 1100; background: #0f0; color: #111; border: none; border-radius: 6px; padding: 0.5em 1em; font-weight: bold; cursor: pointer; opacity: 0.7;"
+    @click="stageComplete = true; finishShown = true"
+    title="Show Congratulations overlay (debug)">
+    Show Win
+  </button>
+
   <!-- Log -->
   <section>
     <h2>Log</h2>
@@ -68,6 +76,18 @@
     </template>
   </section>
 
+  <!-- Win Overlay -->
+  <template x-if="stageComplete && finishShown">
+    <div class="win-overlay">
+      <div class="win-panel">
+        <h2>Congratulations!</h2>
+        <p>You survived the wilds and laid the foundations for a future colony!</p>
+        <div class="win-score">Days Survived: <span x-text="days"></span></div>
+        <button @click="location.reload()" class="try-again-btn">Try again</button>
+      </div>
+    </div>
+  </template>
+
   <script>
 function game() {
   return {
@@ -96,7 +116,7 @@ function game() {
       {id:'primitiveWeapons', name:'Primitive Weapons', cost:{minerals:20, organics:5}, prereq:['scavengingTools'], effect(){ this.log('Crude weapons fashioned. Wildlife encounters will be safer.');}},
       {id:'solarCollector', name:'Solar Collector', cost:{minerals:25}, prereq:[], effect(){ this.built.solarCollector++; this.log('Solar panels deployed. Passive energy begins to flow.');}},
       {id:'batteryBank', name:'Battery Bank', cost:{minerals:30, energy:20}, prereq:['solarCollector'], effect(){ this.energyCap += 100; this.log('Additional batteries increase energy storage.');}},
-      {id:'recyclingStation', name:'Recycling Station', cost:{energy:20, minerals:10}, prereq:['solarCollector'], effect(){ this.log('Debris processing enabled. Minerals production boosted.');}},
+      {id:'recyclingStation', name:'Recycling Station', cost:{energy:20, minerals:10}, prereq:['solarCollector'], effect(){ this.gatherMinerals = 4; this.log('Debris processing enabled. Minerals production boosted.');}},
       {id:'basicAlloys', name:'Basic Alloys (Complete Stage 1)', cost:{energy:50, minerals:50, organics:25}, prereq:['recyclingStation','batteryBank'], effect(){ this.stageComplete = true; this.log('Alloys forged! Stage 1 complete – a settlement beckons...');}}
     ],
 
@@ -128,13 +148,15 @@ function game() {
       this.checkEvents();
     },
     wildlifeEncounter() {
-      if (Math.random() < 0.025) {
+      if (Math.random() < 0.05) {
         if (this.items.primitiveWeapons) {
           this.log('A predator lunges, but you drive it off with your weapons.');
         } else {
-          this.gameOverFunc('You were killed by hostile wildlife.');
-          return true;
+          const stolen = Math.min(this.organics, 3);
+          this.organics -= stolen;
+          this.log(`A predator steals ${stolen} food from your stores!`, 'danger');
         }
+        return true;
       }
       return false;
     },
