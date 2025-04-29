@@ -19,6 +19,11 @@
       <template x-for="(msg, index) in logMessages" :key="index">
         <div :class="msg.cls" x-text="msg.text"></div>
       </template>
+      <template x-if="gameOver">
+        <div style="margin-top: 1em; text-align: center;">
+          <button @click="location.reload()" class="try-again-btn">Try again</button>
+        </div>
+      </template>
     </div>
   </section>
 

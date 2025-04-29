@@ -98,6 +98,25 @@ li {
     border-left: 4px solid #0f0; /* Green accent */
 }
 
+.try-again-btn {
+    background: #222;
+    color: #fff;
+    border: 2px solid #0f0;
+    border-radius: 6px;
+    padding: 0.6em 1.5em;
+    font-size: 1.1em;
+    font-family: inherit;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 0.5em;
+    transition: background 0.2s, color 0.2s, border 0.2s;
+}
+.try-again-btn:hover {
+    background: #0f0;
+    color: #111;
+    border-color: #0f0;
+}
+
 /* Responsive design */
 @media (max-width: 600px) {
     body {
