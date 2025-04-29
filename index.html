@@ -148,6 +148,7 @@ function game() {
       this.log('GAME OVER – ' + reason, 'gameover');
       if (typeof umami !== 'undefined' && umami.track) {
         umami.track('game_over', { reason: reason, days: this.days });
+        umami.track('reason', { days: this.days });
       }
       console.log('Game over triggered:', reason); // Debug log
     },
