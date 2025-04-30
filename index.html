@@ -11,6 +11,24 @@
 <body>
 <div id="game" x-data="game()">
 
+  <!-- Intro Video Overlay -->
+  <template x-if="showIntroVideo">
+    <div class="intro-video-overlay">
+      <video
+        src="media/splash.mp4"
+        class="intro-video"
+        autoplay
+        playsinline
+        @ended="showIntroVideo = false; showSplash = true"
+        @click="showIntroVideo = false; showSplash = true"
+        tabindex="0"
+      ></video>
+      <div class="intro-skip-overlay">
+        <div class="intro-skip" @click="showIntroVideo = false; showSplash = true">Skip</div>
+      </div>
+    </div>
+  </template>
+
   <!-- Debug Win/Loss Buttons (visible, small) -->
   <div style="position: absolute; top: 10px; right: 10px; z-index: 1100; display: flex; gap: 0.5em;">
     <button
@@ -139,7 +157,8 @@ function game() {
     ariaWarn: false,
     finishShown: false,
     days: 1, // Start at Day 1
-    showSplash: true,
+    showSplash: false,
+    showIntroVideo: true,
 
     // ----- Craft Definitions -----
     crafts: [
