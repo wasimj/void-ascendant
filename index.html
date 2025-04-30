@@ -27,6 +27,17 @@
     </button>
   </div>
 
+  <!-- Splash Screen -->
+  <template x-if="showSplash">
+    <div class="splash-overlay">
+      <div class="splash-panel">
+        <h2>Void Ascendant</h2>
+        <p style="margin: 1.5em 0 2em 0;">You wake in the shattered remains of an escape pod. Gather resources to survive.</p>
+        <button @click="startGame()" class="try-again-btn">Begin</button>
+      </div>
+    </div>
+  </template>
+
   <!-- Log -->
   <section>
     <h2>Log</h2>
@@ -128,6 +139,7 @@ function game() {
     ariaWarn: false,
     finishShown: false,
     days: 1, // Start at Day 1
+    showSplash: true,
 
     // ----- Craft Definitions -----
     crafts: [
@@ -224,9 +236,6 @@ function game() {
 
     // ----- Init -----
     init() {
-      // Add initial log message
-      this.log('You wake in the shattered remains of an escape pod. Gather resources to survive.');
-
       // Passive solar generation
       setInterval(() => {
         if (this.gameOver) return;
@@ -253,6 +262,10 @@ function game() {
           this.gameOverFunc('You starved to death.');
         }
       }, 10000);
+    },
+    startGame() {
+      this.showSplash = false;
+      this.init();
     }
   }
 }
