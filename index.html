@@ -90,12 +90,15 @@
       <h2>Resources</h2>
       <ul>
         <li>
-          Energy: 
+          <img src="media/energy.png" alt="Energy" class="icon-inline"> Energy:
           <span :class="{'danger': energy <= 5}" x-text="Math.floor(energy)"></span>/<span x-text="energyCap"></span>
         </li>
-        <li>Minerals: <span x-text="Math.floor(minerals)"></span></li>
         <li>
-          Organics: 
+          <img src="media/minerals.png" alt="Minerals" class="icon-inline"> Minerals:
+          <span x-text="Math.floor(minerals)"></span>
+        </li>
+        <li>
+          <img src="media/organics.png" alt="Organics" class="icon-inline"> Organics:
           <span :class="{'danger': organics <= 1}" x-text="Math.floor(organics)"></span>
         </li>
       </ul>

@@ -291,3 +291,11 @@ li {
         margin-bottom: 0em;
     }
 }
+
+/* Icon Styles */
+.icon-inline {
+    height: 1em;
+    width: 1em;
+    vertical-align: text-bottom;
+    margin-right: 0.25em;
+}
