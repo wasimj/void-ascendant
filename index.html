@@ -10,7 +10,6 @@
 </head>
 <body>
 <div id="game" x-data="game()">
-  <h1>Void Ascendant</h1>
 
   <!-- Debug Win Button (hidden) -->
   <button
@@ -78,8 +77,8 @@
 
   <!-- Win Overlay -->
   <template x-if="stageComplete && finishShown">
-    <div class="win-overlay">
-      <div class="win-panel">
+    <div class="game-over-overlay">
+      <div class="game-over-panel">
         <h2>Congratulations!</h2>
         <p>You survived the wilds and laid the foundations for a future colony!</p>
         <div class="win-score">Days Survived: <span x-text="days"></span></div>
