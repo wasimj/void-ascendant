@@ -172,7 +172,8 @@ li {
     
     .game-over-panel {
         padding: 1.2em 0.5em 1.5em 0.5em;
-        min-width: unset;
+        min-width: 320px;
+        max-width: 90vw;
     }
     .game-over-panel h2 {
         font-size: 1.4em;
