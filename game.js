@@ -177,7 +177,12 @@ window.game = function game() {
     startGame() {
       this.showSplash = false;
       this.init();
-      this.log('Gather food (Organics) and watch out for predators.');
+      let name = this.computerName || localStorage.getItem('voidascendant_player_name') || '';
+      if (name) {
+        this.log(`${name}! Gather food (Organics) and watch out for predators.`);
+      } else {
+        this.log('Gather food (Organics) and watch out for predators.');
+      }
     },
     $init() {
       if (!localStorage.getItem('voidascendant_intro_shown')) {
