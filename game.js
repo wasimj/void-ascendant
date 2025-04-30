@@ -98,11 +98,10 @@ window.game = function game() {
       this.gameOverReason = reason;
       this.finishShown = true;
       if (typeof umami !== 'undefined' && umami.track) {
-        umami.track('game_over', {
-          reason: reason,
-          days: this.days,
-          reason_days: `${reason}|${this.days}`
-        });
+        umami.track('game_over', { reason: reason, days: this.days });
+      }
+      if (typeof posthog !== 'undefined' && posthog.capture) {
+        posthog.capture('game_over', { reason: reason, days: this.days });
       }
       console.log('Game over triggered:', reason); // Debug log
     },
