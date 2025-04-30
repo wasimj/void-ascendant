@@ -1,6 +1,5 @@
 # TODO
 
-2. move css to /css
 - make the debug bar simpler
 3. move images to /image
 4. refactor js
@@ -12,3 +11,4 @@
 # DONE
 
 1. move js
+2. move css to /css
