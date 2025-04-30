@@ -31,8 +31,7 @@
     </div>
   </template>
 
-  <!-- Debug Win/Loss Buttons (hidden) -->
-  <div x-show="false" class="debug-btn-bar">
+  <div x-show="true" class="debug-btn-bar">
     <button
       class="debug-btn debug-btn-green"
       @click="stageComplete = true; finishShown = true"
@@ -112,28 +111,28 @@
   </section>
 
   <!-- Actions -->
-  <section id="actions" style="display: flex; justify-content: space-between; gap: 2em; align-items: flex-start;">
-    <div style="flex: 1; text-align: center;">
-      <div style="font-weight: bold; margin-bottom: 0.3em; color: #0f0;">Generate</div>
-      <button @click="gather('energy')" :disabled="energy >= energyCap || gameOver" style="display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 0 auto;">
-        <img src="media/energy.png" alt="Energy" class="icon-inline" style="font-size: 2em; margin-bottom: 0.2em;">
+  <section id="actions" class="actions-bar">
+    <div class="action-col">
+      <div class="action-label action-label-generate">Generate</div>
+      <button @click="gather('energy')" :disabled="energy >= energyCap || gameOver" class="gather-btn">
+        <img src="media/energy.png" alt="Energy" class="icon-inline gather-icon">
       </button>
-      <div style="font-size: 0.9em; margin-top: 0.1em; color: #0f0;">+1</div>
+      <div class="gather-plus gather-plus-energy">+1</div>
     </div>
-    <div style="flex: 1; text-align: center;">
-      <div style="font-weight: bold; margin-bottom: 0.3em; color: #0f0;">Gather</div>
-      <div style="display: flex; flex-direction: row; justify-content: center; gap: 0.7em;">
-        <div style="display: flex; flex-direction: column; align-items: center;">
-          <button @click="gather('minerals')" :disabled="gameOver" style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
-            <img src="media/minerals.png" alt="Minerals" class="icon-inline" style="font-size: 2em; margin-bottom: 0.2em;">
+    <div class="action-col">
+      <div class="action-label">Gather</div>
+      <div class="gather-row">
+        <div class="gather-item">
+          <button @click="gather('minerals')" :disabled="gameOver" class="gather-btn">
+            <img src="media/minerals.png" alt="Minerals" class="icon-inline gather-icon">
           </button>
-          <div style="font-size: 0.9em; margin-top: 0.1em; color: #0f0;">+<span x-text="gatherMinerals"></span></div>
+          <div class="gather-plus gather-plus-minerals">+<span x-text="gatherMinerals"></span></div>
         </div>
-        <div style="display: flex; flex-direction: column; align-items: center;">
-          <button @click="gather('organics')" :disabled="gameOver" style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
-            <img src="media/organics.png" alt="Organics" class="icon-inline" style="font-size: 2em; margin-bottom: 0.2em;">
+        <div class="gather-item">
+          <button @click="gather('organics')" :disabled="gameOver" class="gather-btn">
+            <img src="media/organics.png" alt="Organics" class="icon-inline gather-icon">
           </button>
-          <div style="font-size: 0.9em; margin-top: 0.1em; color: #3c3;">+<span x-text="gatherOrganics"></span></div>
+          <div class="gather-plus gather-plus-organics">+<span x-text="gatherOrganics"></span></div>
         </div>
       </div>
     </div>
