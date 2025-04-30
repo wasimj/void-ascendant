@@ -30,8 +30,8 @@
     </div>
   </template>
 
-  <!-- Debug Win/Loss Buttons (visible, small) -->
-  <div style="position: absolute; top: 10px; right: 10px; z-index: 1100; display: flex; gap: 0.5em;">
+  <!-- Debug Win/Loss Buttons (hidden) -->
+  <div x-show="false" style="position: absolute; top: 10px; right: 10px; z-index: 1100; display: flex; gap: 0.5em;">
     <button
       class="debug-btn"
       style="background: #0f0; color: #111; border: none; border-radius: 4px; padding: 0.2em 0.7em; font-size: 0.85em; font-weight: bold; cursor: pointer; opacity: 0.7;"
@@ -82,7 +82,7 @@
 
   <!-- Log -->
   <section>
-    <h2>Log</h2>
+    <h2>ARIA says</h2>
     <div id="messages" x-ref="messages">
       <template x-for="(msg, index) in logMessages" :key="index">
         <div :class="msg.cls" x-text="msg.text"></div>
@@ -333,6 +333,7 @@ function game() {
     startGame() {
       this.showSplash = false;
       this.init();
+      this.log('Gather food and watch out for predators.');
     },
     $init() {
       if (!localStorage.getItem('voidascendant_intro_shown')) {
