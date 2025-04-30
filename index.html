@@ -9,7 +9,7 @@
   <script defer src="https://cloud.umami.is/script.js" data-website-id="a5575ef9-727c-4d11-a992-cc853e89e46e"></script>
 </head>
 <body>
-<div id="game" x-data="game()">
+<div id="game" x-data="game()" x-init="initAlpine()">
 
   <!-- Intro Video Overlay -->
   <template x-if="showIntroVideo">
@@ -18,6 +18,7 @@
         src="media/splash.mp4"
         class="intro-video"
         autoplay
+        muted
         playsinline
         @ended="showIntroVideo = false; showSplash = true"
         @click="showIntroVideo = false; showSplash = true"
@@ -42,6 +43,12 @@
       @click="gameOver = true; finishShown = true; gameOverReason = 'Debug: Forced Loss'; stageComplete = false"
       title="Show Game Over overlay (debug)">
       Show Loss
+    </button>
+    <button
+      style="background: #09f; color: #fff; border: none; border-radius: 4px; padding: 0.2em 0.7em; font-size: 0.85em; font-weight: bold; cursor: pointer; opacity: 0.7;"
+      @click="localStorage.removeItem('voidascendant_intro_shown'); location.reload()"
+      title="Reset intro video flag and reload">
+      Reset
     </button>
   </div>
 
@@ -158,7 +165,7 @@ function game() {
     finishShown: false,
     days: 1, // Start at Day 1
     showSplash: false,
-    showIntroVideo: true,
+    showIntroVideo: false,
 
     // ----- Craft Definitions -----
     crafts: [
@@ -285,6 +292,19 @@ function game() {
     startGame() {
       this.showSplash = false;
       this.init();
+    },
+    $init() {
+      if (!localStorage.getItem('voidascendant_intro_shown')) {
+        this.showIntroVideo = true;
+        this.showSplash = false;
+        localStorage.setItem('voidascendant_intro_shown', '1');
+      } else {
+        this.showIntroVideo = false;
+        this.showSplash = true;
+      }
+    },
+    initAlpine() {
+      this.$init();
     }
   }
 }
