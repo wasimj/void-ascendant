@@ -1,6 +1,7 @@
 # TODO
 
 2. move css to /css
+- make the debug bar simpler
 3. move images to /image
 4. refactor js
 5. ARIA
