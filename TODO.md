@@ -1,0 +1,13 @@
+# TODO
+
+2. move css to /css
+3. move images to /image
+4. refactor js
+5. ARIA
+- Wake up!
+- Gather food message when it goes red
+- Gather energy message when it goes red
+
+# DONE
+
+1. move js
