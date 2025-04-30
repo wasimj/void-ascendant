@@ -22,6 +22,10 @@ window.game = function game() {
     showSplash: false,
     showIntroVideo: false,
     paused: false,
+    showComputerIntro: false, // Show after video, before splash
+    computerIntroStep: 0, // 0: Wake up, 1: Memory loss/name, 2: Crash message
+    computerName: '',
+    computerNameInput: '',
 
     // ----- Craft Definitions -----
     crafts: [
@@ -112,6 +116,32 @@ window.game = function game() {
         this.log('Congratulations. You survived the wilds and laid the foundations for a future colony!', 'msg');
         this.finishShown = true;
         this.gameOver = true; // Prevent further countdowns and game over triggers
+      }
+    },
+
+    // ----- Ship Computer Intro Methods -----
+    startComputerIntro() {
+      this.showIntroVideo = false;
+      this.showComputerIntro = true;
+      this.computerIntroStep = 0;
+    },
+    nextComputerIntro() {
+      if (this.computerIntroStep === 0) {
+        this.computerIntroStep = 1;
+      } else if (this.computerIntroStep === 1) {
+        if (this.computerNameInput.trim()) {
+          this.computerName = this.computerNameInput.trim();
+          localStorage.setItem('voidascendant_player_name', this.computerName);
+          this.computerIntroStep = 2;
+        }
+      } else if (this.computerIntroStep === 2) {
+        this.showComputerIntro = false;
+        this.showSplash = true;
+      }
+    },
+    onComputerNameKey(e) {
+      if (e.key === 'Enter') {
+        this.nextComputerIntro();
       }
     },
 
