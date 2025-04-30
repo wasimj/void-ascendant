@@ -32,38 +32,33 @@
   </template>
 
   <!-- Debug Win/Loss Buttons (hidden) -->
-  <div x-show="false" style="position: absolute; top: 10px; right: 10px; z-index: 1100; display: flex; gap: 0.5em;">
+  <div x-show="false" class="debug-btn-bar">
     <button
-      class="debug-btn"
-      style="background: #0f0; color: #111; border: none; border-radius: 4px; padding: 0.2em 0.7em; font-size: 0.85em; font-weight: bold; cursor: pointer; opacity: 0.7;"
+      class="debug-btn debug-btn-green"
       @click="stageComplete = true; finishShown = true"
       title="Show Congratulations overlay (debug)">
       Show Win
     </button>
     <button
-      class="debug-btn"
-      style="background: #f33; color: #fff; border: none; border-radius: 4px; padding: 0.2em 0.7em; font-size: 0.85em; font-weight: bold; cursor: pointer; opacity: 0.7;"
+      class="debug-btn debug-btn-red"
       @click="gameOver = true; finishShown = true; gameOverReason = 'Debug: Forced Loss'; stageComplete = false"
       title="Show Game Over overlay (debug)">
       Show Loss
     </button>
     <button
-      class="debug-btn"
-      style="background: #09f; color: #fff; border: none; border-radius: 4px; padding: 0.2em 0.7em; font-size: 0.85em; font-weight: bold; cursor: pointer; opacity: 0.7;"
+      class="debug-btn debug-btn-blue"
       @click="localStorage.removeItem('voidascendant_intro_shown'); location.reload()"
       title="Reset intro video flag and reload">
       Reset
     </button>
     <button
-      class="debug-btn"
-      style="background: #fa0; color: #222; border: none; border-radius: 4px; padding: 0.2em 0.7em; font-size: 0.85em; font-weight: bold; cursor: pointer; opacity: 0.7;"
+      class="debug-btn debug-btn-orange"
       @click="paused = !paused"
       :title="paused ? 'Resume game timers' : 'Pause game timers'"
       x-text="paused ? 'Resume' : 'Pause'"
     ></button>
     <button
-      class="debug-btn"
-      style="background: #0af; color: #fff; border: none; border-radius: 4px; padding: 0.2em 0.7em; font-size: 0.85em; font-weight: bold; cursor: pointer; opacity: 0.7;"
+      class="debug-btn debug-btn-cyan"
       @click="log('A faint signal pulses into the sky... will anyone hear it?')"
       title="Trigger Emergency Beacon log message (debug)">
       Signal Log
