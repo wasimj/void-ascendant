@@ -1,6 +1,5 @@
 # TODO
 
-3. move images to /image
 4. refactor js
 5. ARIA
 - Wake up!
