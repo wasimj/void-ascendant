@@ -311,6 +311,12 @@ li {
         margin-bottom: 0px;
         padding-bottom: 0px;
     }
+
+    .days {
+        font-size: 2em; 
+        font-weight: bold;
+        padding-top: 0.8em;
+    }
 }
 
 /* Icon Styles */
