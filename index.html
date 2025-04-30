@@ -50,6 +50,12 @@
       title="Reset intro video flag and reload">
       Reset
     </button>
+    <button
+      style="background: #fa0; color: #222; border: none; border-radius: 4px; padding: 0.2em 0.7em; font-size: 0.85em; font-weight: bold; cursor: pointer; opacity: 0.7;"
+      @click="paused = !paused"
+      :title="paused ? 'Resume game timers' : 'Pause game timers'"
+      x-text="paused ? 'Resume' : 'Pause'"
+    ></button>
   </div>
 
   <!-- Splash Screen -->
@@ -110,7 +116,7 @@
 
   <!-- Crafting -->
   <section>
-    <h2>Craft / Build</h2>
+    <h2>Craft</h2>
     <template x-for="craft in crafts" :key="craft.id">
       <div class="craft" x-show="!items[craft.id] && hasPrereq(craft)">
         <button :disabled="!canAfford(craft.cost) || gameOver" @click="craftItem(craft)" x-text="craft.name"></button>
@@ -166,6 +172,7 @@ function game() {
     days: 1, // Start at Day 1
     showSplash: false,
     showIntroVideo: false,
+    paused: false,
 
     // ----- Craft Definitions -----
     crafts: [
@@ -264,7 +271,7 @@ function game() {
     init() {
       // Passive solar generation
       setInterval(() => {
-        if (this.gameOver) return;
+        if (this.gameOver || this.paused) return;
         if (this.built.solarCollector > 0) {
           const produced = 2 * this.built.solarCollector;
           this.energy = Math.min(this.energyCap, this.energy + produced);
@@ -273,14 +280,14 @@ function game() {
 
       // Energy drain
       setInterval(() => {
-        if (this.gameOver) return;
+        if (this.gameOver || this.paused) return;
         this.energy -= 1;
         if (this.energy < 0) this.gameOverFunc('Life‑support failed after energy depletion.');
       }, 5000);
 
       // Hunger
       setInterval(() => {
-        if (this.gameOver) return;
+        if (this.gameOver || this.paused) return;
         if (this.organics > 0) {
           this.organics -= 1;
           this.days += 1; // Increment day counter when food is consumed
