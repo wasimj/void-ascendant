@@ -263,6 +263,11 @@ li {
     }
 }
 
+/* Intro Description */
+.intro-desc {
+    margin: 1.5em 0 2em 0;
+}
+
 /* Responsive design */
 @media (max-width: 600px) {
     body {
