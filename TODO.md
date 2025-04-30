@@ -5,6 +5,7 @@
 - Wake up!
 - Gather food message when it goes red
 - Gather energy message when it goes red
+- fix umami tracking (e.g. game over, days, message)
 
 # DONE
 
