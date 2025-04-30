@@ -97,11 +97,12 @@ window.game = function game() {
       this.gameOver = true;
       this.gameOverReason = reason;
       this.finishShown = true;
+      let name = this.computerName || localStorage.getItem('voidascendant_player_name') || '';
       if (typeof umami !== 'undefined' && umami.track) {
-        umami.track('game_over', { reason: reason, days: this.days });
+        umami.track('game_over', { reason: reason, days: this.days, name: name });
       }
       if (typeof posthog !== 'undefined' && posthog.capture) {
-        posthog.capture('game_over', { reason: reason, days: this.days });
+        posthog.capture('game_over', { reason: reason, days: this.days, name: name });
       }
       console.log('Game over triggered:', reason); // Debug log
     },
