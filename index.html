@@ -60,7 +60,7 @@
         </template>
         <template x-if="computerIntroStep === 2">
           <div class="computer-intro-message" aria-live="assertive">
-            <span class="computer-label">ARIA:</span> Hi <span x-text="computerName"></span>,<br>I'm afraid we've crashed at our destination.<br>You're in trouble. Very little is working.<br>I'm so sorry, there was nothing I could do.
+            <span class="computer-label">ARIA:</span> Hi <span x-text="computerName"></span>,<br>I'm afraid we've crashed at our destination. You're in trouble. Very little is working. I'm so sorry, there was nothing I could do. <br>
             <div class="computer-intro-continue" @click="nextComputerIntro()" tabindex="0" @keydown.enter="nextComputerIntro()" role="button" aria-label="Continue">Tap to continue</div>
           </div>
         </template>
