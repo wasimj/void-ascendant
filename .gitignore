@@ -43,3 +43,7 @@ htmlcov/
 nosetests.xml
 coverage.xml
 *.cover
+
+# VS Code workspace files
+*.code-workspace
+void-ascendant.code-workspace
