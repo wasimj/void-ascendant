@@ -1,7 +1,5 @@
 # TODO
 
-- create Settings page 
-- move debug to Settings 
 - Gather food message when it goes red
 - Gather energy message when it goes red
 - fix umami tracking (e.g. game over, name, days, message)
@@ -9,6 +7,8 @@
 4. refactor js
 
 # DONE
+- create Settings page 
+- move debug to Settings 
 
 1. move js
 
