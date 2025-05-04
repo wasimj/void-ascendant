@@ -49,5 +49,6 @@ coverage.xml
 void-ascendant.code-workspace
 
 # Test output
+tests/
 tests/output/
 geckodriver.log
