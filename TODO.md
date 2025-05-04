@@ -1,6 +1,7 @@
 # TODO
 
 - refactor js
+- add tests (e.g. integration tests)
 - add Rest option at beginning
 - make game fit on screen properly
 - remove energy Generate / Resources until required
