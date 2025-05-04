@@ -151,6 +151,11 @@ window.game = function game() {
 
     // ----- Init -----
     init() {
+      // Initialize with timers paused if showing splash screen
+      if (this.showSplash) {
+        this.paused = true;
+      }
+      
       // Passive solar generation
       setInterval(() => {
         if (this.gameOver || this.paused) return;
@@ -180,7 +185,7 @@ window.game = function game() {
     },
     startGame() {
       this.showSplash = false;
-      this.init();
+      this.paused = false; // Unpause timers when Begin button is clicked
       let name = this.computerName || localStorage.getItem('voidascendant_player_name') || '';
       if (name) {
         this.log(`${name}! Gather food (Organics) and watch out for predators.`);
@@ -197,6 +202,9 @@ window.game = function game() {
         this.showIntroVideo = false;
         this.showSplash = true;
       }
+      
+      // Initialize game systems but timers will be paused by default if showing splash
+      this.init();
       
       // Load debug mode setting from localStorage
       this.debugMode = localStorage.getItem('voidascendant_debug_mode') === '1';
