@@ -151,8 +151,8 @@ window.game = function game() {
 
     // ----- Init -----
     init() {
-      // Initialize with timers paused if showing splash screen
-      if (this.showSplash) {
+      // Initialize with timers paused if showing splash screen or computer intro
+      if (this.showSplash || this.showComputerIntro) {
         this.paused = true;
       }
       
