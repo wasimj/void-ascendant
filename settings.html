@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Void Ascendant: Settings</title>
   <link rel="stylesheet" href="style.css">
+  <script defer src="js/constants.js"></script>
   <script defer src="game.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
   <script defer src="https://cloud.umami.is/script.js" data-website-id="a5575ef9-727c-4d11-a992-cc853e89e46e"></script>
@@ -148,7 +149,7 @@
         <button 
           class="toggle-btn" 
           :class="debugMode ? 'toggle-on' : 'toggle-off'"
-          @click="debugMode = !debugMode; localStorage.setItem('voidascendant_debug_mode', debugMode ? '1' : '0')">
+          @click="debugMode = !debugMode; localStorage.setItem(GAME_CONSTANTS.STORAGE_KEYS.DEBUG_MODE, debugMode ? '1' : '0')">
           <span x-text="debugMode ? 'ON' : 'OFF'"></span>
         </button>
         <span class="setting-description">Show debug buttons on main page</span>

@@ -1,13 +1,17 @@
 // game.js
+// Use the global GAME_CONSTANTS object
+const { INITIAL_STATE, TIMERS, MESSAGES, STORAGE_KEYS, GATHERING, SOLAR, LOG_CLASSES } = window.GAME_CONSTANTS;
+
+// Define the game function and expose to window
 window.game = function game() {
   return {
     // ----- State -----
-    energy: 10,
-    energyCap: 50,
-    minerals: 0,
-    organics: 3,
-    gatherMinerals: 1,
-    gatherOrganics: 1,
+    energy: INITIAL_STATE.ENERGY,
+    energyCap: INITIAL_STATE.ENERGY_CAP,
+    minerals: INITIAL_STATE.MINERALS,
+    organics: INITIAL_STATE.ORGANICS,
+    gatherMinerals: INITIAL_STATE.GATHER_MINERALS_RATE,
+    gatherOrganics: INITIAL_STATE.GATHER_ORGANICS_RATE,
     items: {},
     built: { solarCollector: 0 },
     totalGathered: 0,
@@ -18,7 +22,7 @@ window.game = function game() {
     memoryShown: false,
     ariaWarn: false,
     finishShown: false,
-    days: 1, // Start at Day 1
+    days: INITIAL_STATE.START_DAY, // Start at Day 1
     showSplash: false,
     showIntroVideo: false,
     paused: false,
@@ -43,7 +47,7 @@ window.game = function game() {
     ],
 
     // ----- Helper Methods -----
-    log(text, cls='msg') {
+    log(text, cls=LOG_CLASSES.DEFAULT) {
       // Create a new array to ensure Alpine detects the change
       this.logMessages = [...this.logMessages, {text, cls}];
       this.$nextTick(() => {
@@ -70,13 +74,13 @@ window.game = function game() {
       this.checkEvents();
     },
     wildlifeEncounter() {
-      if (Math.random() < 0.05) {
+      if (Math.random() < GATHERING.WILDLIFE_ENCOUNTER_CHANCE) {
         if (this.items.primitiveWeapons) {
           this.log('A predator lunges, but you drive it off with your weapons.');
         } else {
-          const stolen = Math.min(this.organics, 3);
+          const stolen = Math.min(this.organics, GATHERING.MAX_ORGANICS_STOLEN);
           this.organics -= stolen;
-          this.log(`A predator steals ${stolen} food from your stores!`, 'danger');
+          this.log(`A predator steals ${stolen} food from your stores!`, LOG_CLASSES.DANGER);
         }
         return true;
       }
@@ -85,7 +89,7 @@ window.game = function game() {
     gather(type) {
       if (this.gameOver) return;
       if (type === 'energy') {
-        if (this.energy >= this.energyCap) { this.log('Energy stores full.'); return; }
+        if (this.energy >= this.energyCap) { this.log(MESSAGES.ENERGY_FULL); return; }
         this.energy += 1;
       } else {
         if (this.wildlifeEncounter()) return;
@@ -101,7 +105,7 @@ window.game = function game() {
       this.gameOver = true;
       this.gameOverReason = reason;
       this.finishShown = true;
-      let name = this.computerName || localStorage.getItem('voidascendant_player_name') || '';
+      let name = this.computerName || localStorage.getItem(STORAGE_KEYS.PLAYER_NAME) || '';
       if (typeof umami !== 'undefined' && umami.track) {
         umami.track('game_over', { reason: reason, days: this.days, name: name });
       }
@@ -111,16 +115,16 @@ window.game = function game() {
       console.log('Game over triggered:', reason); // Debug log
     },
     checkEvents() {
-      if (this.totalGathered >= 50 && !this.memoryShown) {
-        this.log('Memory Fragment: A flash – the Athena breaking apart above the planet...');
+      if (this.totalGathered >= GATHERING.TOTAL_GATHERED_MEMORY_THRESHOLD && !this.memoryShown) {
+        this.log(MESSAGES.MEMORY_FRAGMENT);
         this.memoryShown = true;
       }
       if (this.items.solarCollector && !this.ariaWarn) {
-        this.log('ARIA: "Unexplained energy signature detected nearby..."');
+        this.log(MESSAGES.ARIA_ENERGY_WARNING);
         this.ariaWarn = true;
       }
       if (this.stageComplete && !this.finishShown) {
-        this.log('Congratulations. You survived the wilds and laid the foundations for a future colony!', 'msg');
+        this.log(MESSAGES.STAGE_COMPLETE, 'msg');
         this.finishShown = true;
         this.gameOver = true; // Prevent further countdowns and game over triggers
       }
@@ -139,7 +143,7 @@ window.game = function game() {
       } else if (this.computerIntroStep === 1) {
         if (this.computerNameInput.trim()) {
           this.computerName = this.computerNameInput.trim();
-          localStorage.setItem('voidascendant_player_name', this.computerName);
+          localStorage.setItem(STORAGE_KEYS.PLAYER_NAME, this.computerName);
           this.computerIntroStep = 2;
         }
       } else if (this.computerIntroStep === 2) {
@@ -172,19 +176,19 @@ window.game = function game() {
       this.solarInterval = setInterval(() => {
         if (this.gameOver || this.paused) return;
         if (this.built.solarCollector > 0) {
-          const produced = 2 * this.built.solarCollector;
+          const produced = SOLAR.ENERGY_PER_COLLECTOR * this.built.solarCollector;
           this.energy = Math.min(this.energyCap, this.energy + produced);
           console.log(`[SOLAR] Generated ${produced} energy, new total: ${this.energy}/${this.energyCap}`);
         }
-      }, 1000);
+      }, TIMERS.SOLAR_GENERATION);
 
       // Energy drain
       this.energyInterval = setInterval(() => {
         if (this.gameOver || this.paused) return;
         this.energy -= 1;
         console.log(`[ENERGY] Consumed 1 energy, remaining: ${this.energy}/${this.energyCap}`);
-        if (this.energy < 0) this.gameOverFunc('Life‑support failed after energy depletion.');
-      }, 5000);
+        if (this.energy < 0) this.gameOverFunc(MESSAGES.ENERGY_DEPLETED);
+      }, TIMERS.ENERGY_DRAIN);
 
       // Hunger
       this.hungerInterval = setInterval(() => {
@@ -194,13 +198,13 @@ window.game = function game() {
           this.days += 1; // Increment day counter when food is consumed
           console.log(`[DAY] Day ${this.days} begins. Consumed 1 organics, remaining: ${this.organics}`);
         } else {
-          this.gameOverFunc('You starved to death.');
+          this.gameOverFunc(MESSAGES.STARVED);
         }
-      }, 10000);
+      }, TIMERS.HUNGER);
       
       console.log("[GAME] Game started, timers active");
       
-      let name = this.computerName || localStorage.getItem('voidascendant_player_name') || '';
+      let name = this.computerName || localStorage.getItem(STORAGE_KEYS.PLAYER_NAME) || '';
       if (name) {
         this.log(`${name}! Gather food (Organics) and watch out for predators.`);
       } else {
@@ -208,10 +212,10 @@ window.game = function game() {
       }
     },
     $init() {
-      if (!localStorage.getItem('voidascendant_intro_shown')) {
+      if (!localStorage.getItem(STORAGE_KEYS.INTRO_SHOWN)) {
         this.showIntroVideo = true;
         this.showSplash = false;
-        localStorage.setItem('voidascendant_intro_shown', '1');
+        localStorage.setItem(STORAGE_KEYS.INTRO_SHOWN, '1');
       } else {
         this.showIntroVideo = false;
         this.showSplash = true;
@@ -221,7 +225,7 @@ window.game = function game() {
       this.init();
       
       // Load debug mode setting from localStorage
-      this.debugMode = localStorage.getItem('voidascendant_debug_mode') === '1';
+      this.debugMode = localStorage.getItem(STORAGE_KEYS.DEBUG_MODE) === '1';
     },
     initAlpine() {
       this.$init();
@@ -229,7 +233,7 @@ window.game = function game() {
   }
 }
 
-// Ensure Alpine picks up the function after script load
+// Make sure Alpine picks up the function
 document.addEventListener('alpine:init', () => {
   window.game = window.game;
 });
