@@ -1,5 +1,11 @@
 # TODO
 
+- make game fit on screen properly
+- remove energy Generate / Resources until required
+- remove Minerals Gather / Resources until required
+- make ARIA log non-scrolling
+- make ARIA log more visual (e.g. a cracked screen)
+- make ARIA log red
 - Gather food message when it goes red
 - Gather energy message when it goes red
 - fix umami tracking (e.g. game over, name, days, message)
