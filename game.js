@@ -26,6 +26,7 @@ window.game = function game() {
     computerIntroStep: 0, // 0: Wake up, 1: Memory loss/name, 2: Crash message
     computerName: '',
     computerNameInput: '',
+    debugMode: false, // Toggle for debug button visibility
 
     // ----- Craft Definitions -----
     crafts: [
@@ -196,6 +197,9 @@ window.game = function game() {
         this.showIntroVideo = false;
         this.showSplash = true;
       }
+      
+      // Load debug mode setting from localStorage
+      this.debugMode = localStorage.getItem('voidascendant_debug_mode') === '1';
     },
     initAlpine() {
       this.$init();

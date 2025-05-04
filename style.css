@@ -431,6 +431,32 @@ li {
     color: #3c3;
 }
 
+/* Header Row with Settings Icon */
+.header-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5em;
+}
+
+.settings-link {
+  margin-right: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+  border-radius: 5px;
+  transition: background 0.2s ease;
+}
+
+.settings-link:hover {
+  background: rgba(0, 255, 0, 0.1);
+}
+
+.settings-icon {
+  width: 24px;
+  height: 24px;
+}
+
 /* Ship Computer Intro Overlay */
 .computer-intro-overlay {
     position: fixed;
