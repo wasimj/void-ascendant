@@ -1,7 +1,6 @@
 # TODO
 
 - refactor js
-- add tests (e.g. integration tests)
 - add Rest option at beginning
 - make game fit on screen properly
 - remove energy Generate / Resources until required
@@ -15,6 +14,7 @@
 
 
 # DONE
+- add tests (e.g. integration tests)
 - create Settings page 
 - move debug to Settings 
 
