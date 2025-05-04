@@ -27,6 +27,9 @@ window.game = function game() {
     computerName: '',
     computerNameInput: '',
     debugMode: false, // Toggle for debug button visibility
+    solarInterval: null,
+    energyInterval: null,
+    hungerInterval: null,
 
     // ----- Craft Definitions -----
     crafts: [
@@ -127,6 +130,7 @@ window.game = function game() {
     startComputerIntro() {
       this.showIntroVideo = false;
       this.showComputerIntro = true;
+      this.paused = true; // Ensure timers are paused during computer intro
       this.computerIntroStep = 0;
     },
     nextComputerIntro() {
@@ -141,6 +145,7 @@ window.game = function game() {
       } else if (this.computerIntroStep === 2) {
         this.showComputerIntro = false;
         this.showSplash = true;
+        // Keep paused state since we're moving to splash screen
       }
     },
     onComputerNameKey(e) {
@@ -151,13 +156,20 @@ window.game = function game() {
 
     // ----- Init -----
     init() {
-      // Initialize with timers paused if showing splash screen or computer intro
-      if (this.showSplash || this.showComputerIntro) {
-        this.paused = true;
-      }
+      // Only set initial state and variables, but don't start timers yet
+      // Timers will be started in startGame()
+      this.paused = true; // Start with everything paused
+      
+      console.log("[INIT] Game initialized, timers paused until game starts");
+    },
+    startGame() {
+      this.showSplash = false;
+      this.paused = false; // Unpause timers when Begin button is clicked
+      
+      // Start all game timers when the game actually begins
       
       // Passive solar generation
-      setInterval(() => {
+      this.solarInterval = setInterval(() => {
         if (this.gameOver || this.paused) return;
         if (this.built.solarCollector > 0) {
           const produced = 2 * this.built.solarCollector;
@@ -167,7 +179,7 @@ window.game = function game() {
       }, 1000);
 
       // Energy drain
-      setInterval(() => {
+      this.energyInterval = setInterval(() => {
         if (this.gameOver || this.paused) return;
         this.energy -= 1;
         console.log(`[ENERGY] Consumed 1 energy, remaining: ${this.energy}/${this.energyCap}`);
@@ -175,7 +187,7 @@ window.game = function game() {
       }, 5000);
 
       // Hunger
-      setInterval(() => {
+      this.hungerInterval = setInterval(() => {
         if (this.gameOver || this.paused) return;
         if (this.organics > 0) {
           this.organics -= 1;
@@ -185,10 +197,9 @@ window.game = function game() {
           this.gameOverFunc('You starved to death.');
         }
       }, 10000);
-    },
-    startGame() {
-      this.showSplash = false;
-      this.paused = false; // Unpause timers when Begin button is clicked
+      
+      console.log("[GAME] Game started, timers active");
+      
       let name = this.computerName || localStorage.getItem('voidascendant_player_name') || '';
       if (name) {
         this.log(`${name}! Gather food (Organics) and watch out for predators.`);
