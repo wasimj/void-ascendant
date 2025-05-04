@@ -47,3 +47,7 @@ coverage.xml
 # VS Code workspace files
 *.code-workspace
 void-ascendant.code-workspace
+
+# Test output
+tests/output/
+geckodriver.log
