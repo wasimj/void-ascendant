@@ -4,26 +4,13 @@ const { INITIAL_STATE, TIMERS, MESSAGES, STORAGE_KEYS, GATHERING, SOLAR, LOG_CLA
 
 // Define the game function and expose to window
 window.game = function game() {
-  // Create a merged object with core functionality and remaining game systems
+  // Create a merged object with core functionality, UI functionality, and remaining game systems
   const gameObject = {
     // Import core functionality
     ...window.gameCore,
     
-    //=====================================================================
-    // UI STATE
-    //=====================================================================
-    
-    // ----- UI State -----
-    logMessages: [],
-    showSplash: false,
-    showIntroVideo: false,
-    debugMode: false, // Toggle for debug button visibility
-    
-    // ----- Ship Computer Intro -----
-    showComputerIntro: false, // Show after video, before splash
-    computerIntroStep: 0, // 0: Wake up, 1: Memory loss/name, 2: Crash message
-    computerName: '',
-    computerNameInput: '',
+    // Import UI functionality
+    ...window.gameUI,
     
     //=====================================================================
     // GAME DEFINITIONS
@@ -124,121 +111,6 @@ window.game = function game() {
       
       // Check for any triggered events
       this.checkEvents();
-    },
-    
-    //=====================================================================
-    // UI AND INTERACTION
-    //=====================================================================
-    
-    // ----- UI State Management -----
-    initializeUIState() {
-      if (!localStorage.getItem(STORAGE_KEYS.INTRO_SHOWN)) {
-        this.showIntroVideo = true;
-        this.showSplash = false;
-        localStorage.setItem(STORAGE_KEYS.INTRO_SHOWN, '1');
-      } else {
-        this.showIntroVideo = false;
-        this.showSplash = true;
-      }
-    },
-    
-    loadDebugSetting() {
-      this.debugMode = localStorage.getItem(STORAGE_KEYS.DEBUG_MODE) === '1';
-    },
-    
-    hideStartScreen() {
-      this.showSplash = false;
-    },
-    
-    showGameOverScreen() {
-      this.finishShown = true;
-    },
-    
-    // ----- UI Messaging -----
-    displayMessage(text, cls=LOG_CLASSES.DEFAULT) {
-      this.log(text, cls);
-    },
-    
-    displayWelcomeMessage() {
-      let name = this.computerName || localStorage.getItem(STORAGE_KEYS.PLAYER_NAME) || '';
-      if (name) {
-        this.displayMessage(`${name}! Gather food (Organics) and watch out for predators.`);
-      } else {
-        this.displayMessage('Gather food (Organics) and watch out for predators.');
-      }
-    },
-    
-    // ----- Logging System -----
-    log(text, cls=LOG_CLASSES.DEFAULT) {
-      // Create a new array to ensure Alpine detects the change
-      this.logMessages = [...this.logMessages, {text, cls}];
-      this.$nextTick(() => {
-        if (this.$refs.messages) {
-          this.$refs.messages.scrollTop = this.$refs.messages.scrollHeight;
-        }
-      });
-    },
-    
-    // ----- Ship Computer Intro UI -----
-    startComputerIntro() {
-      this.hideIntroVideo();
-      this.showComputerIntroScreen();
-      this.pauseGame();
-      this.resetComputerIntroStep();
-    },
-    
-    hideIntroVideo() {
-      this.showIntroVideo = false;
-    },
-    
-    showComputerIntroScreen() {
-      this.showComputerIntro = true;
-    },
-    
-    resetComputerIntroStep() {
-      this.computerIntroStep = 0;
-    },
-    
-    nextComputerIntro() {
-      if (this.computerIntroStep === 0) {
-        this.advanceToNameInput();
-      } else if (this.computerIntroStep === 1) {
-        this.processPossibleNameInput();
-      } else if (this.computerIntroStep === 2) {
-        this.finishComputerIntro();
-      }
-    },
-    
-    advanceToNameInput() {
-      this.computerIntroStep = 1;
-    },
-    
-    processPossibleNameInput() {
-      if (this.computerNameInput.trim()) {
-        this.savePlayerName(this.computerNameInput.trim());
-        this.advanceToCrashMessage();
-      }
-    },
-    
-    savePlayerName(name) {
-      this.computerName = name;
-      localStorage.setItem(STORAGE_KEYS.PLAYER_NAME, name);
-    },
-    
-    advanceToCrashMessage() {
-      this.computerIntroStep = 2;
-    },
-    
-    finishComputerIntro() {
-      this.showComputerIntro = false;
-      this.showSplash = true;
-      // Keep paused state since we're moving to splash screen
-    },
-    
-    onComputerNameKey(e) {
-      if (e.key === 'Enter') {
-        this.nextComputerIntro();
-      }
     },
     
     //=====================================================================
