@@ -1,5 +1,6 @@
 # TODO
 
+- refactor js
 - add Rest option at beginning
 - make game fit on screen properly
 - remove energy Generate / Resources until required
@@ -11,7 +12,6 @@
 - Gather energy message when it goes red
 - fix umami tracking (e.g. game over, name, days, message)
 
-4. refactor js
 
 # DONE
 - create Settings page 
