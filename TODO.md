@@ -1,5 +1,6 @@
 # TODO
 
+- add Rest option at beginning
 - make game fit on screen properly
 - remove energy Generate / Resources until required
 - remove Minerals Gather / Resources until required
