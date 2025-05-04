@@ -6,6 +6,7 @@
   <title>Void Ascendant: Settings</title>
   <link rel="stylesheet" href="style.css">
   <script defer src="js/constants.js"></script>
+  <script defer src="js/core.js"></script>
   <script defer src="game.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
   <script defer src="https://cloud.umami.is/script.js" data-website-id="a5575ef9-727c-4d11-a992-cc853e89e46e"></script>
@@ -203,7 +204,7 @@
         </button>
         
         <button class="debug-btn" style="background: #f55; color: white;" 
-                @click="days = 1; localStorage.clear(); location.href='index.html'" 
+                @click="window.gameCore.resetGame()" 
                 title="Reset all game progress">
           Reset Game
         </button>
