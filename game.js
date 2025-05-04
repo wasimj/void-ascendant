@@ -162,6 +162,7 @@ window.game = function game() {
         if (this.built.solarCollector > 0) {
           const produced = 2 * this.built.solarCollector;
           this.energy = Math.min(this.energyCap, this.energy + produced);
+          console.log(`[SOLAR] Generated ${produced} energy, new total: ${this.energy}/${this.energyCap}`);
         }
       }, 1000);
 
@@ -169,6 +170,7 @@ window.game = function game() {
       setInterval(() => {
         if (this.gameOver || this.paused) return;
         this.energy -= 1;
+        console.log(`[ENERGY] Consumed 1 energy, remaining: ${this.energy}/${this.energyCap}`);
         if (this.energy < 0) this.gameOverFunc('Life‑support failed after energy depletion.');
       }, 5000);
 
@@ -178,6 +180,7 @@ window.game = function game() {
         if (this.organics > 0) {
           this.organics -= 1;
           this.days += 1; // Increment day counter when food is consumed
+          console.log(`[DAY] Day ${this.days} begins. Consumed 1 organics, remaining: ${this.organics}`);
         } else {
           this.gameOverFunc('You starved to death.');
         }
