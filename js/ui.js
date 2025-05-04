@@ -14,6 +14,7 @@ window.gameUI = {
     showSplash: false,
     showIntroVideo: false,
     debugMode: false, // Toggle for debug button visibility
+    finishShown: false, // Game over state
     
     // ----- Ship Computer Intro -----
     showComputerIntro: false, // Show after video, before splash
@@ -45,7 +46,7 @@ window.gameUI = {
     },
     
     showGameOverScreen() {
-        window.gameCore.finishShown = true;
+        this.finishShown = true;
     },
     
     //=====================================================================
